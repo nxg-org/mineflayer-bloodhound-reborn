@@ -18,4 +18,7 @@ bot.once("spawn", () => {
     console.log("fuck")
 })
 
+bot.on("bloodhoundEvent", (time, event) => {
+    console.log("hi", time, event.hurt.entity.name, event.attacker.entity.name)
+})
 

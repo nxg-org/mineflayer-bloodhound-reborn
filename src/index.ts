@@ -4,7 +4,7 @@ import customPVP from "@nxg-org/mineflayer-custom-pvp"
 import { BloodHound } from "./bloodhound";
 import type {Entity} from "prismarine-entity"
 import type { Item } from "prismarine-item";
-import { AttackingEntity, DamagedEntity } from "./types";
+import { AttackingEntity, CorrelatedEvent, DamagedEntity } from "./types";
 
 declare module "mineflayer" {
     interface Bot {
@@ -13,7 +13,7 @@ declare module "mineflayer" {
     interface BotEvents {
         bloodhoundEntityDamaged: (hurt: Entity, info: DamagedEntity) => void;
         bloodhoundEntityAttacks: (attacker: Entity, info: AttackingEntity) => void;
-        correlatedAttack: (hurt: Entity, attacker: Entity, weapon: Item | null) => void;
+        bloodhoundEvent: (time: number, event: CorrelatedEvent) => void;
     }
 }
 

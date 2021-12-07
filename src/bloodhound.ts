@@ -16,7 +16,10 @@ import {
     CorrelatedEvent,
 } from "./types";
 import { Shot } from "@nxg-org/mineflayer-custom-pvp";
+import { encode } from "punycode";
 
+
+const emptyVec = new Vec3(0, 0, 0)
 export class BloodHound {
     private lastEntitiesDamaged: DamagedEntities = {};
     private lastAttackingEntities: AttackingEntities = {};
@@ -45,14 +48,17 @@ export class BloodHound {
             }
         });
 
-        this.bot.on("entitySpawn", (entity) => {
+        this.bot.on("entitySpawn", async (entity) => {
             if (entity.name === "arrow") {
                 const possibleEntitesSorted = Object.values(bot.entities)
                     .filter((e) => ["player", "skeleton", "piglin"].includes(e.name ?? ""))
                     .sort((a, b) => entity.position.distanceTo(a.position) - entity.position.distanceTo(b.position));
                 if (possibleEntitesSorted.length === 0) return;
                 const responsibleEntity = possibleEntitesSorted[0];
-                const info = this.buildAttackingEntityObject(responsibleEntity, 1 /* TODO: Add better item detection */);
+                do {
+                    await this.bot.waitForTicks(1)
+                } while (entity.velocity.equals(emptyVec))
+                const info = this.buildAttackingEntityObject(responsibleEntity, 1, undefined, entity);
                 this.lastAttackingEntities[responsibleEntity.id] ??= [];
                 this.lastAttackingEntities[responsibleEntity.id].push(info);
                 this.bot.emit("bloodhoundEntityAttacks", entity, info);
@@ -97,8 +103,10 @@ export class BloodHound {
             case 0:
             default:
                 weaponInfo = { name: weaponName, enchants: entity.heldItem?.enchants, range: 5 };
+                break
             case 1:
                 weaponInfo = { name: weaponName, enchants: entity.heldItem?.enchants, shot: Shot.fromArrow(this.bot.world, projectile!) };
+                break;
         }
 
         const yaw = entity.yaw;
@@ -111,7 +119,7 @@ export class BloodHound {
     }
 
     cleanupAttackers() {
-        const min_time = performance.now() - this.maxEntryAge * 50;
+        const min_time = secondsToTicks(performance.now() - this.maxEntryAge * 50);
         Object.entries(this.lastAttackingEntities).forEach((entry) => {
             const index = Number(entry[0]);
             entry[1].forEach((e) => {
@@ -156,9 +164,14 @@ export class BloodHound {
                 if (this.bot.util.entity.getDistanceBetweenEntities(hurt.entity, attacker.entity) > this.maxMeleeDistance) return false;
                 return true;
             case 1:
+                console.log("bow attack")
                 if (getTickTimeDelta(hurt.tickTime, attacker.tickTime) > this.maxRangedDelta) return false;
                 //TODO: Fix shot to actually work.
                 if (!(attacker.weaponInfo as RangedWeaponInfo).shot) return false;
+                return true;
+            default:
+                console.log("other weapon type:", attacker.weaponType)
+                return false;
         }
     }
 
@@ -166,13 +179,14 @@ export class BloodHound {
         const attackingLen = Object.values(this.lastAttackingEntities).flat().length;
         const damagedLen = Object.values(this.lastEntitiesDamaged).flat().length;
         const correlatedEventsLen = Object.values(this.correlatedEvents).flat().length;
-        if (attackingLen > this.maxAttackEntryLength) this.cleanupAttackers();
-        if (damagedLen > this.maxDamagedEntryLength) this.cleanupDamaged();
-        if (correlatedEventsLen > this.maxCachedEventsLength) this.cleanupCachedEvents();
+        if (this.maxAttackEntryLength > attackingLen) this.cleanupAttackers();
+        if (this.maxDamagedEntryLength > damagedLen) this.cleanupDamaged();
+        if (this.maxCachedEventsLength > correlatedEventsLen) this.cleanupCachedEvents();
         if (attackingLen === 0 || damagedLen === 0) return null;
         const possibleEvent = this.correlatedEvents[time]?.find((val) => val.hurt.entity === hurtEntity);
         if (!!possibleEvent) return possibleEvent;
 
+     
         const hurtEvent = this.lastEntitiesDamaged[hurtEntity.id]?.find((val) => val.tickTime === time);
         if (!hurtEvent) return null;
 
@@ -181,8 +195,10 @@ export class BloodHound {
         ) as AttackingEntity | undefined;
 
         if (foundAttacker) {
+            const event = this.buildCorrelatedEvent(hurtEvent, foundAttacker)
             this.correlatedEvents[time] ??= [];
-            this.correlatedEvents[time].push(this.buildCorrelatedEvent(hurtEvent, foundAttacker));
+            this.correlatedEvents[time].push(event);
+            this.bot.emit("bloodhoundEvent", time, event)
         }
     }
 }

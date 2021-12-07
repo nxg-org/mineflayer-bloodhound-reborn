@@ -32,9 +32,9 @@
     vec3 "^0.1.7"
 
 "@nxg-org/mineflayer-util-plugin@^1.0.1":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@nxg-org/mineflayer-util-plugin/-/mineflayer-util-plugin-1.1.0.tgz#3072ef561e70dd543c3fe56c82c11e98e0476386"
-  integrity sha512-ML/HMIF+OqW8BLsQJPr7sGmwTSEf890wXaPRjqBfjPYy4D9ilSrvdAZLidfxwJzFmF3TwspPNmzKeDZa5Okzsw==
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@nxg-org/mineflayer-util-plugin/-/mineflayer-util-plugin-1.2.2.tgz#e481c03349b7e9c5a9fd9aa42debd847a9f3a37c"
+  integrity sha512-DuRXzJUi5cXQkEJhP/DYCV99AGHRgynBdXPgzKWVOFtAFstQ80eO72EDSty7MXMEvSktTuBSwZQgcF8SWP6AgA==
   dependencies:
     "@nxg-org/mineflayer-util-plugin" "^1.0.1"
     minecraft-data "^2.97.0"
@@ -44,12 +44,11 @@
     prismarine-item "^1.11.1"
     vec3 "^0.1.7"
 
-"@nxg-org/mineflayer-util-plugin@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@nxg-org/mineflayer-util-plugin/-/mineflayer-util-plugin-1.2.0.tgz#3ef28af783b8c101ca63dd7697f3a5f24fe4d649"
-  integrity sha512-pT6HTRMTEBvkTxkQO/HxkTkRcNYwZMY63zWciWDGMWjJHLRV1itH1/az8ZcfPaAzUzDJ4sreMpxtjfZj4GSKww==
+"@nxg-org/mineflayer-util-plugin@^1.2.4":
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/@nxg-org/mineflayer-util-plugin/-/mineflayer-util-plugin-1.2.4.tgz#9a58aa9d2e82818a2229ac9c1c26d5a88afa6b6e"
+  integrity sha512-Bs3Aneii8fd107GAW60+NvIDTpUdHkCgNjoedcwAxiplo27+1DkJp3UdZ+imeJ4hNubL6hZ6jBzJY1uVCahA7g==
   dependencies:
-    "@nxg-org/mineflayer-util-plugin" "^1.0.1"
     minecraft-data "^2.97.0"
     mineflayer "^3.11.2"
     mineflayer-pathfinder "^1.8.0"
