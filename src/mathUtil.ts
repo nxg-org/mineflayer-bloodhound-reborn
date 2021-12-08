@@ -7,7 +7,7 @@ export function entityToEntityYaw(origin: Vec3, destination: Vec3) {
 }
 
 export function getTickTimeDelta(first: number, second: number) {
-    return Math.abs(secondsToTicks(first) - secondsToTicks(second));
+    return Math.abs(first - second);
 }
 
 export function secondsToTicks(seconds: number) {

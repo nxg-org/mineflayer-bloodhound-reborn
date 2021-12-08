@@ -1,6 +1,7 @@
 import { createBot } from "mineflayer";
 import bloodHound from "./index"
 import { promisify } from "util";
+import { WeaponType } from "./types";
 const sleep = promisify(setTimeout)
 
 
@@ -19,6 +20,6 @@ bot.once("spawn", () => {
 })
 
 bot.on("bloodhoundEvent", (time, event) => {
-    console.log("hi", time, event.hurt.entity.name, event.attacker.entity.name)
+    console.log(time, event.hurt.damageCaused, event.hurt.entity.name, event.attacker.entity.name, event.attacker.weaponInfo.name, WeaponType[event.attacker.weaponType])
 })
 
