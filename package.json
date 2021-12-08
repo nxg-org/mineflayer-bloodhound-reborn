@@ -23,8 +23,8 @@
         "test": "npm run build && node --trace-warnings lib/example.js"
     },
     "dependencies": {
-        "@nxg-org/mineflayer-custom-pvp": "^1.0.5",
-        "@nxg-org/mineflayer-util-plugin": "^1.2.6",
+        "@nxg-org/mineflayer-custom-pvp": "^1.0.6",
+        "@nxg-org/mineflayer-util-plugin": "^1.2.7",
         "minecraft-data": "^2.97.0",
         "mineflayer": "^3.11.2",
         "prismarine-block": "^1.10.3",

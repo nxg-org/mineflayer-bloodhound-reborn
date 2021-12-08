@@ -74,9 +74,12 @@ export class BloodHound {
         //TODO: Make better in-view detection (In util plugin).
         // Fuck, this is really simple if I have that detection.
         this.bot.on("entitySwingArm", (entity) => {
-            console.log(`Entity attacked: ${entity.username ?? entity.name}`)
+
             //TODO: Detect if mining/other cause of swinging arm, ignore otherwise.
             // if (["sword", "_axe"].some((n) => entity.heldItem?.name.includes(n))) {
+                const targetEntity = this.bot.util.raytrace.entityAtEntityCursor(entity, 3.5)
+                if (!targetEntity) return;
+                // console.log(`Entity attacked: ${entity.username ?? entity.name}`)
                 this.lastAttackingEntities[entity.id] ??= [];
                 this.lastAttackingEntities[entity.id].push(this.buildAttackingEntityObject(entity, 0));
             // }
