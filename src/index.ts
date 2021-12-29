@@ -20,6 +20,6 @@ declare module "mineflayer" {
 export default function inject(bot: Bot) {
     if (!bot.hasPlugin(customPVP)) bot.loadPlugin(customPVP)
     bot.loadPlugin(utilPlugin)
-    bot.autoCrystal = new BloodHound(bot);
+    bot.bloodhound = new BloodHound(bot);
 }
 
