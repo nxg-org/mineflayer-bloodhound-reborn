@@ -8,7 +8,7 @@ import { AttackingEntity, CorrelatedEvent, DamagedEntity } from "./types";
 
 declare module "mineflayer" {
     interface Bot {
-        autoCrystal: BloodHound
+        bloodhound: BloodHound
     }
     interface BotEvents {
         bloodhoundEntityDamaged: (hurt: Entity, info: DamagedEntity) => void;
